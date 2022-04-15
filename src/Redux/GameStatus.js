@@ -9,15 +9,19 @@ const gameSlice = createSlice({
     lifepoints: 20, 
   },
   reducers: {
+
     addToScore: (state) => {
       state.score += 1;
     }, 
+
     decreaseLifepoints: (state) => {
       state.lifepoints -= 1;
     },
+
     addLetters: (state, action) => {
       state.letters.push(action.payload);
     }, 
+
     removeLetters: (state, action) => {
 
       const count = state.letters.filter(obj => {
@@ -32,16 +36,19 @@ const gameSlice = createSlice({
       state.letters = state.letters.filter(letter => letter.letter !== action.payload)
 
     },
+
     lostLetters: (state, action) => {
 
       state.lifepoints -= 1;
-      //state.letters = state.letters.filter(letter => letter.id !== action.payload.id);
+      state.letters = state.letters.filter(letter => letter.id !== action.payload.id);
       state.lostLetters.push(action.payload);
       
     },
+
     StopGame: (state) => {
       state.letters = [];
     }
+    
   }
 })
 

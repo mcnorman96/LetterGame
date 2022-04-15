@@ -41,9 +41,9 @@ const Game = () => {
 
   useEffect(() => {
     if (lifepoints === 0) {
-      alert('gameover');
-      clearInterval(2); 
       dispatch(StopGame());
+      clearInterval(2); 
+      alert('gameover');
     }
   }, [lifepoints]);
 

@@ -5,6 +5,7 @@ import { lostLetters } from '../Redux/GameStatus';
 const Letter = ( { letter } ) => {
   const [position, setPosition] = useState(letter.positionY);
   const dispatch = useDispatch();
+  var checkUpdate = true; 
 
   function moveDown() {
     setPosition(
@@ -15,9 +16,11 @@ const Letter = ( { letter } ) => {
   useEffect(() => {
 
     if (position === 490) {
+      
       dispatch( 
         lostLetters({...letter}) 
       )
+      checkUpdate = false;
 
     } else {
 
@@ -25,7 +28,7 @@ const Letter = ( { letter } ) => {
 
     }
 
-  })
+  }, [position])
   
   return (
     <>
