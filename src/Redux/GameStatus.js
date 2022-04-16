@@ -7,6 +7,8 @@ const gameSlice = createSlice({
     lostLetters: [],
     score: 0, 
     lifepoints: 20, 
+    isPlaying: true, 
+    spawnRate: 1000,
   },
   reducers: {
 
@@ -14,43 +16,68 @@ const gameSlice = createSlice({
       state.score += 1;
     }, 
 
-    decreaseLifepoints: (state) => {
-      state.lifepoints -= 1;
-    },
-
     addLetters: (state, action) => {
+  
       state.letters.push(action.payload);
+    
     }, 
 
     removeLetters: (state, action) => {
-
+      
       const count = state.letters.filter(obj => {
         if (obj.letter === action.payload) {
           return true;
         }
-      
         return false;
       }).length;
 
-      state.score += count;
-      state.letters = state.letters.filter(letter => letter.letter !== action.payload)
+      if (count > 1 && state.isPlaying) {
+        state.score += count;
+        state.letters = state.letters.filter(letter => letter.letter !== action.payload)
+      }
 
     },
 
-    lostLetters: (state, action) => {
+    updateLetters: ( state ) => {
+      const lostLetters = [];
+      const newLetters = [];
 
-      state.lifepoints -= 1;
-      state.letters = state.letters.filter(letter => letter.id !== action.payload.id);
-      state.lostLetters.push(action.payload);
-      
-    },
+      for (let letter of state.letters) {
+          const newY = letter.positionY + 10 * 5 / 60;
+          if (newY + letter.size <= 455) {
+              newLetters.push(
+                  {
+                      ...letter,
+                      positionY: newY,
+                  }
+              );
+          } else {
+            lostLetters.push(
+              {
+                  ...letter
+              }
+            );
+            state.lifepoints -= 1;
+          }
+      }
+      state.letters = newLetters;
+      state.lostLetters = [...state.lostLetters, ...lostLetters];
+    }, 
 
     StopGame: (state) => {
       state.letters = [];
+    },
+
+    pauseGame: (state) => {
+      if (state.isPlaying) {
+        state.isPlaying = false;
+      } else {
+        state.isPlaying = true;
+      }
     }
-    
+
   }
 })
 
-export const { addToScore, decreaseLifepoints, addLetters, removeLetters, lostLetters, StopGame } = gameSlice.actions; 
+export const { addToScore, decreaseLifepoints, addLetters, removeLetters, lostLetters, updateLetters, StopGame, pauseGame } = gameSlice.actions; 
 export default gameSlice.reducer;

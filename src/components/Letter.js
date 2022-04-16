@@ -1,42 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { lostLetters } from '../Redux/GameStatus';
+import React from 'react'
 
 const Letter = ( { letter } ) => {
-  const [position, setPosition] = useState(letter.positionY);
-  const dispatch = useDispatch();
-  var checkUpdate = true; 
-
-  function moveDown() {
-    setPosition(
-      position + 1
-    );
-   }
-
-  useEffect(() => {
-
-    if (position === 490) {
-      
-      dispatch( 
-        lostLetters({...letter}) 
-      )
-      checkUpdate = false;
-
-    } else {
-
-      requestAnimationFrame(moveDown);
-
-    }
-
-  }, [position])
   
+  const letterStyle = {
+    backgroundColor: letter.color,
+    height: `${letter.size}px`,
+    width: `${letter.size}px`,
+    left: `${letter.positionX}%`,
+    top: `${letter.positionY}px`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transform: 'translateX(-50%)', 
+    textTransform: 'uppercase',
+    
+  };
+
   return (
-    <>
-          <div id='letter' style={ { top: position + 'px', left: letter.positionX + '%', padding: letter.size + 'px', background: 'grey' } }>
-          { letter.letter }
-        </div>
-  
-    </>
+    <div id='letter' style={ letterStyle }>
+      { letter.letter }
+    </div>
   )
 }
 

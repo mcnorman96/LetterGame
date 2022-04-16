@@ -4,48 +4,72 @@ body {
 }
 
 .game {
-  display: flex; 
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  display: flex;
   flex-wrap: wrap;
-  align-items: center; 
+  align-items: center;
   max-width: 1000px;
-  margin: 100px auto; 
+  width: 100%;
 }
 
 .board {
   width: 69%;
-  height: 500px;
-  border: 1px solid black; 
-  position: relative;
+  border: 1px solid black;
 }
 
 .active-board {
-  height: 400px;
-  width: 100%;
+  position: relative;
+  height: 450px;
+  width: calc(100% - 100px);
+  display: block;
+  margin: 0 auto;
 }
 
 .disabled-board {
-  height: 100px;
-  width: 100%;
+  position: relative;
+  height: 50px;
+  width: calc(100% - 100px);
+  display: block;
+  margin: 0 50px;
+}
+
+.disabled-board::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50px;
+  width: calc(100% + 100px);
+  border-top: 1px solid black;
 }
 
 .table {
-  display: flex; 
-  width: 30%; 
+  display: flex;
+  width: 30%;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.score, .lifepoints {
+.score,
+.lifepoints {
   margin-bottom: 20px;
   font-size: 20px;
 }
 
-.score h3, .lifepoints h3 {
+.score h3,
+.lifepoints h3 {
   margin-bottom: 10px;
 }
 
 #letter {
   position: absolute;
+}
+
+button {
+  padding: 10px 35px;
+  border: none;
 }
