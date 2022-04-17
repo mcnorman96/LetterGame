@@ -9,6 +9,7 @@ const gameSlice = createSlice({
     lifepoints: 20, 
     isPlaying: true, 
     spawnRate: 1000,
+    speed: 60,
   },
   reducers: {
 
@@ -35,7 +36,6 @@ const gameSlice = createSlice({
         state.score += count;
         state.letters = state.letters.filter(letter => letter.letter !== action.payload)
       }
-
     },
 
     updateLetters: ( state ) => {
@@ -43,22 +43,26 @@ const gameSlice = createSlice({
       const newLetters = [];
 
       for (let letter of state.letters) {
-          const newY = letter.positionY + 10 * 5 / 60;
+          const newY = letter.positionY + 10 * 5 / state.speed;
           if (newY + letter.size <= 455) {
               newLetters.push(
                   {
-                      ...letter,
-                      positionY: newY,
+                    ...letter,
+                    positionY: newY,
                   }
               );
           } else {
             lostLetters.push(
               {
-                  ...letter
+                ...letter
               }
             );
             state.lifepoints -= 1;
           }
+      }
+      
+      if (state.speed > 1) {
+        state.speed = state.speed - 0.01;
       }
       state.letters = newLetters;
       state.lostLetters = [...state.lostLetters, ...lostLetters];

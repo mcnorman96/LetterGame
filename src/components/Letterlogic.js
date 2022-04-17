@@ -4,7 +4,8 @@ export const SIZES = [25, 30, 35, 40, 45, 50];
 
 export const LETTERS = ['a', 'b', 'c', 'd', 'e'];
 
-export const SPAWN_RATE = 1000;
+export const SPAWN_RATE = [600, 650, 700, 750, 800, 850, 900, 950, 1000]
+
 
 export const newLetter = () => {
   var result = {

@@ -11,7 +11,7 @@ const Game = () => {
   const letters = useSelector( state => state.game.letters );
   const lostLetters = useSelector( state => state.game.lostLetters );
   const GameStatus = useSelector( state => state.game.isPlaying );
-  const SpawnRate = useSelector(state => state.game.spawnRate );
+  const GameSpeed = useSelector( state => state.game.speed );
   const dispatch = useDispatch();
   const requestRef = useRef();
   const intervalRef = useRef();
@@ -24,12 +24,20 @@ const Game = () => {
   }, [dispatch]);
 
   const makeLetter = useCallback(() => {
-    setTimeout(() => {
+
       dispatch(
         addLetters({ ...newLetter() })
       );
-    }, Math.random() * 1000)
-  }, [dispatch]);
+
+      intervalRef.current && clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(makeLetter, randRange(SPAWN_RATE) * GameSpeed/100);
+
+  }, [dispatch, GameSpeed]);
+
+  const randRange = useCallback((data) => {
+    var newTime = data[Math.floor(data.length * Math.random())];
+    return newTime;
+  })
 
   const UpdateLetterPosition = useCallback(() => {
     dispatch(
@@ -39,9 +47,9 @@ const Game = () => {
   }, [dispatch]); 
 
   useEffect(() => {
-    
+
     if (GameStatus) {
-      intervalRef.current = setInterval(makeLetter, 1000);
+      intervalRef.current = setInterval(makeLetter, randRange(SPAWN_RATE));
       requestRef.current = requestAnimationFrame(UpdateLetterPosition);
     } else {
       intervalRef.current && clearInterval(intervalRef.current);
