@@ -11,10 +11,10 @@ const Game = () => {
   const letters = useSelector( state => state.game.letters );
   const lostLetters = useSelector( state => state.game.lostLetters );
   const GameStatus = useSelector( state => state.game.isPlaying );
-  const GameSpeed = useSelector( state => state.game.speed );
   const dispatch = useDispatch();
   const requestRef = useRef();
   const intervalRef = useRef();
+  const fieldRef = useRef();
 
   const handlePause = useCallback(()=> {
     dispatch(
@@ -23,25 +23,25 @@ const Game = () => {
     requestRef.current && cancelAnimationFrame(requestRef.current);
   }, [dispatch]);
 
-  const makeLetter = useCallback(() => {
+  const randRange = useCallback((data) => {
+    var newTime = data[Math.floor(data.length * Math.random())];
+    return newTime;
+  }, [])
 
+  const makeLetter = useCallback(() => {
+    
       dispatch(
         addLetters({ ...newLetter() })
       );
 
       intervalRef.current && clearInterval(intervalRef.current);
-      intervalRef.current = setInterval(makeLetter, randRange(SPAWN_RATE) * GameSpeed/100);
+      intervalRef.current = setInterval(makeLetter, randRange(SPAWN_RATE));
 
-  }, [dispatch, GameSpeed]);
-
-  const randRange = useCallback((data) => {
-    var newTime = data[Math.floor(data.length * Math.random())];
-    return newTime;
-  })
+  }, [dispatch, randRange]);
 
   const UpdateLetterPosition = useCallback(() => {
     dispatch(
-      updateLetters()
+      updateLetters(fieldRef.current.offsetHeight)
     )
     requestRef.current = requestAnimationFrame(UpdateLetterPosition);
   }, [dispatch]); 
@@ -56,7 +56,7 @@ const Game = () => {
       requestRef.current && cancelAnimationFrame(requestRef.current);
     }
     
-  }, [makeLetter, GameStatus, UpdateLetterPosition])
+  }, [makeLetter, GameStatus, UpdateLetterPosition, randRange])
 
   useEffect(() => {
     if (lifepoints === 0) {
@@ -81,8 +81,8 @@ const Game = () => {
 
   return (
     <div className='game'>
-      <div className='board' id='board' ref={requestRef}>
-        <div className='active-board'>
+      <div className='board' id='board' >
+        <div className='active-board' ref={fieldRef}>
           { letters?.map((letter, i) => (
           <Letter key={i} letter={letter} />
           ))}
@@ -95,7 +95,7 @@ const Game = () => {
         </div>
         <div className='table'>
           <div className='gamecontrols'>
-            <button className={GameStatus ? 'Pause' : 'Play'} onClick={handlePause}>
+            <button onClick={handlePause}>
             {
               GameStatus ? 'Pause' : 'Play' 
             }

@@ -72,4 +72,5 @@ body {
 button {
   padding: 10px 35px;
   border: none;
+  cursor: pointer;
 }

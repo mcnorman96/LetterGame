@@ -38,13 +38,13 @@ const gameSlice = createSlice({
       }
     },
 
-    updateLetters: ( state ) => {
+    updateLetters: ( state, action ) => {
       const lostLetters = [];
       const newLetters = [];
 
       for (let letter of state.letters) {
           const newY = letter.positionY + 10 * 5 / state.speed;
-          if (newY + letter.size <= 455) {
+          if (newY + letter.size <= action.payload + 5) {
               newLetters.push(
                   {
                     ...letter,
@@ -73,6 +73,7 @@ const gameSlice = createSlice({
     },
 
     pauseGame: (state) => {
+      if (state.lifepoints <= 0) return state.isPlaying = false;
       if (state.isPlaying) {
         state.isPlaying = false;
       } else {

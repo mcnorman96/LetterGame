@@ -6,7 +6,6 @@ export const LETTERS = ['a', 'b', 'c', 'd', 'e'];
 
 export const SPAWN_RATE = [600, 650, 700, 750, 800, 850, 900, 950, 1000]
 
-
 export const newLetter = () => {
   var result = {
     letter: LETTERS[Math.floor(Math.random() * LETTERS.length)], 
